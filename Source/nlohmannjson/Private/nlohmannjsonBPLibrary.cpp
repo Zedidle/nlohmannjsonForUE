@@ -9,13 +9,10 @@ UnlohmannjsonBPLibrary::UnlohmannjsonBPLibrary(const FObjectInitializer& ObjectI
 
 }
 
-FJSON UnlohmannjsonBPLibrary::loadjsonfile(const FString& file)
+FJSON UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
 {
 	std::ifstream f(TCHAR_TO_UTF8(*file));
 	if (!f) {
-		// 抛出异常
-		//throw("Can't find file %s", file);
-		//throw std::runtime_error("load json file failure");
 		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::loadjsonfile load error: %s"), *file);
 		return FJSON(nullptr);
 	}
@@ -272,35 +269,9 @@ bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& JSON)
 	}
 }
 
-FString UnlohmannjsonBPLibrary::UrlEncode(const FString& String)
-{
-	string str = TCHAR_TO_UTF8(*String);
-	std::ostringstream escaped;
-	escaped.fill('0');
-	escaped << std::hex;
-
-	for (char c : str) {
-		// 保留字符不编码
-		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
-			escaped << c;
-		}
-		else {
-			// 将非保留字符编码为%xx形式
-			escaped << '%' << std::setw(2) << int((unsigned char)c);
-		}
-	}
-
-	//UE_LOG(LogTemp, Log, TEXT("UrlEncode2 : %s ."), escaped.str().c_str());
-	return escaped.str().c_str();
-}
-
 FString UnlohmannjsonBPLibrary::BinaryDecode(const FString& Message)
 {
-		// 在这里处理来自 JavaScript 的消息
-		// 你需要将 UTF-8 编码的字符串转换为 Unreal Engine 的 FString
 		FString DecodedMessage = FString(UTF8_TO_TCHAR(TCHAR_TO_UTF8(*Message)));
-
-		// 现在你可以在这里处理你的中文消息
 		UE_LOG(LogTemp, Log, TEXT("Received message from JavaScript: %s"), *DecodedMessage);
 		return DecodedMessage;
 }
