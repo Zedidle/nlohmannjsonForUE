@@ -17,17 +17,16 @@ USTRUCT(BlueprintType)
 struct FJSON
 {
 	GENERATED_USTRUCT_BODY()
-	FJSON(){};
+	FJSON():data(new json){};
 	FJSON(json& d) :data(&d) {};
 
-	json* data;
-	json d;
+	json* data;;
 
 	operator bool() const {
 		return bool(data);
 	}
 
-	FJSON SetField(const FString& key, const FString& field);
+	const FJSON SetField(const FString& key, const FJSON& field);
 };
 
 

@@ -5,18 +5,20 @@
 
 
 
-FJSON FJSON::SetField(const FString& key, const FString& field)
+const FJSON FJSON::SetField(const FString& key, const FJSON& field)
 {
 	string k = TCHAR_TO_UTF8(*key);
 	if (data->is_object())
 	{
-		(*data)[k] = json::parse(TCHAR_TO_UTF8(*field));
+		//(*data)[k] = json::parse(TCHAR_TO_UTF8(*field));
+		(*data)[k] = *(field.data);
 	}
 	else if (data->is_null())
 	{
-		(*data) = {
-			{ k , TCHAR_TO_UTF8(*field) }
-		};
+		//(*data) = {
+		//	{ k , TCHAR_TO_UTF8(*field) }
+		//};
+		(*data) = { k, *(field.data) };
 	}
 	else
 	{
@@ -41,7 +43,7 @@ FJSON& UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
 		return *(new FJSON());
 	}
 
-	json j = json::parse(f);
+	static json j = json::parse(f);
 	FJSON* J = new FJSON(j);
 	f.close();
 	return *J;
@@ -57,7 +59,7 @@ const FJSON& UnlohmannjsonBPLibrary::PrintJSON(const FJSON& J)
 {
 	if (J.data)
 	{
-		string s = J.data->dump();
+		string s = (*J.data).dump();
 		UE_LOG(LogTemp, Log, TEXT("Print J : %s"), UTF8_TO_TCHAR(s.c_str()));
 
 		const FString Message = FString::Printf(TEXT("Print J : %s"), UTF8_TO_TCHAR(s.c_str()));
@@ -176,7 +178,7 @@ FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key)
 		json b = (*J.data)[k];
 		check(b.is_object());
 		if (b.is_object()) {
-			json result = b.template get<json>();
+			static json result = b.template get<json>();
 			return FJSON(result);
 		}
 		else {
@@ -298,8 +300,24 @@ bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& J)
 
 FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& J, const FString& key, const FJSON& field)
 {
+
 	string k = TCHAR_TO_UTF8(*key);
-	//J.SetField(key, field);
+	if(J.data->is_null())
+	{
+		(*J.data)[k] =  *(field.data);
+	}
+	else
+	{
+		if (J.data->is_object())
+		{
+			(*J.data)[k] = *(field.data);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("It's not a valid type can set a key-field"));
+		}
+	}
+	
 	return J;
 }
 
