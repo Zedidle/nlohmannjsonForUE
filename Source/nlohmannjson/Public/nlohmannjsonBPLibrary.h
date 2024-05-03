@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Author: Zen5th
 
 #pragma once
 
@@ -19,6 +19,7 @@ struct FJSON
 	GENERATED_USTRUCT_BODY()
 	FJSON():data(new json){};
 	FJSON(json& d) :data(&d) {};
+	FJSON(json* d) :data(d) {};
 
 	json* data;;
 
@@ -123,5 +124,28 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set JSON filed"), Category = "njson")
 	static FJSON SetJSONField(const FJSON& J, const FString& key, const FJSON& field);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set JSON fileds"), Category = "njson")
+	static FJSON MultiSetJSONFields(const FJSON& J, const TMap<FString, FJSON>& kf);
+
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON String", CompactNodeTitle = "JSON String"), Category = "njson")
+	static FJSON MakeJSONString(const FString& S);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Int", CompactNodeTitle = "JSON Int"), Category = "njson")
+	static FJSON MakeJSONInt(const int I);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Float", CompactNodeTitle = "JSON Float"), Category = "njson")
+	static FJSON MakeJSONFloat(const float F);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Bool", CompactNodeTitle = "JSON Bool"), Category = "njson")
+	static FJSON MakeJSONBool(const bool B);
+
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Keys"), Category = "njson")
+	static TArray<FString> GetJSONKeys(const FJSON& J);
+
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Save JSON"), Category = "njson")
+	static void SaveJSON(const FJSON& J, const FString& filepath);
 
 };
