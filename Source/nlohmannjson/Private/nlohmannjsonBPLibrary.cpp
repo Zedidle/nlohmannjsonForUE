@@ -8,13 +8,13 @@
 FJSON FJSON::SetField(const FString& key, const FString& field)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	if (this->data.is_object())
+	if (data->is_object())
 	{
-		this->data[k] = json::parse(TCHAR_TO_UTF8(*field));
+		(*data)[k] = json::parse(TCHAR_TO_UTF8(*field));
 	}
-	else if (this->data.is_null())
+	else if (data->is_null())
 	{
-		this->data = {
+		(*data) = {
 			{ k , TCHAR_TO_UTF8(*field) }
 		};
 	}
@@ -33,18 +33,18 @@ UnlohmannjsonBPLibrary::UnlohmannjsonBPLibrary(const FObjectInitializer& ObjectI
 
 }
 
-FJSON UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
+FJSON& UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
 {
 	std::ifstream f(TCHAR_TO_UTF8(*file));
 	if (!f) {
 		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::loadjsonfile load error: %s"), *file);
-		return FJSON(nullptr);
+		return *(new FJSON());
 	}
 
-	json data = json::parse(f);
-	FJSON j(data);
+	json j = json::parse(f);
+	FJSON* J = new FJSON(j);
 	f.close();
-	return  j;
+	return *J;
 }
 
 FJSON UnlohmannjsonBPLibrary::Parse(const FString& content)
@@ -53,42 +53,45 @@ FJSON UnlohmannjsonBPLibrary::Parse(const FString& content)
 	return FJSON(j);
 }
 
-const FJSON& UnlohmannjsonBPLibrary::PrintJSON(const FJSON& JSON)
+const FJSON& UnlohmannjsonBPLibrary::PrintJSON(const FJSON& J)
 {
-	string s = JSON.data.dump();
-	UE_LOG(LogTemp, Log, TEXT("Print JSON : %s"), UTF8_TO_TCHAR(s.c_str()));
-	
-	const FString Message = FString::Printf(TEXT("Print JSON : %s"), UTF8_TO_TCHAR(s.c_str()));
-	if (GEngine != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Turquoise, *Message);
+	if (J.data)
+	{
+		string s = J.data->dump();
+		UE_LOG(LogTemp, Log, TEXT("Print J : %s"), UTF8_TO_TCHAR(s.c_str()));
+
+		const FString Message = FString::Printf(TEXT("Print J : %s"), UTF8_TO_TCHAR(s.c_str()));
+		if (GEngine != nullptr) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Turquoise, *Message);
+		}
 	}
-	return JSON;
+	return J;
 }
 
-void UnlohmannjsonBPLibrary::PrintJSONType(const FJSON& JSON)
+void UnlohmannjsonBPLibrary::PrintJSONType(const FJSON& J)
 {
-	string s = JSON.data.type_name();
-	UE_LOG(LogTemp, Log, TEXT("Print JSON Type: %s"), UTF8_TO_TCHAR(s.c_str()));
+	string s = J.data->type_name();
+	UE_LOG(LogTemp, Log, TEXT("Print J Type: %s"), UTF8_TO_TCHAR(s.c_str()));
 
-	const FString Message = FString::Printf(TEXT("Print JSON Type: %s"), UTF8_TO_TCHAR(s.c_str()));
+	const FString Message = FString::Printf(TEXT("Print J Type: %s"), UTF8_TO_TCHAR(s.c_str()));
 	if (GEngine != nullptr) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, *Message);
 	}
 }
 
-FString UnlohmannjsonBPLibrary::JSONToString(const FJSON& JSON)
+FString UnlohmannjsonBPLibrary::JSONToString(const FJSON& J)
 {
-	string s = JSON.data.dump();
+	string s = J.data->dump();
 	const FString Message = FString::Printf(TEXT("%s"), UTF8_TO_TCHAR(s.c_str()));
 	return Message;
 }
 
-FString UnlohmannjsonBPLibrary::GetString(const FJSON& JSON, const FString& key)
+FString UnlohmannjsonBPLibrary::GetString(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	if (JSON.data.contains(k))
+	if (J.data->contains(k))
 	{
-		json b = JSON.data[k];
+		json b = (*J.data)[k];
 
 		check(b.is_string());
 		if (b.is_string()) {
@@ -96,7 +99,7 @@ FString UnlohmannjsonBPLibrary::GetString(const FJSON& JSON, const FString& key)
 			return result.c_str();
 		}
 		else {
-			UE_LOG(LogTemp, Log, TEXT("JSON GetString :  No String Type ."));
+			UE_LOG(LogTemp, Log, TEXT("J GetString :  No String Type ."));
 			return "JSONGetString-NoStringType";
 		}
 	}
@@ -106,121 +109,121 @@ FString UnlohmannjsonBPLibrary::GetString(const FJSON& JSON, const FString& key)
 	}
 }
 
-float UnlohmannjsonBPLibrary::GetFloat(const FJSON& JSON, const FString& key)
+float UnlohmannjsonBPLibrary::GetFloat(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	json b = JSON.data[k];
+	json b = (*J.data)[k];
 	check(b.is_number_float());
 	if (b.is_number_float()) {
 		float result = b.template get<float>();
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  No Float Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Float Type ."));
 		return 0.0f;
 	}
 }
 
-int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& JSON, const FString& key)
+int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	json b = JSON.data[k];
+	json b = (*J.data)[k];
 	check(b.is_number_integer());
 	if (b.is_number_integer()) {
 		int32 result = b.template get<int32>();
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  No Integer Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Integer Type ."));
 		return 0;
 	}
 
 }
 
-bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& JSON, const FString& key)
+bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	json b = JSON.data[k];
+	json b = (*J.data)[k];
 	check(b.is_boolean());
 	if (b.is_boolean()) {
 		bool result = b.template get<bool>();
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  No Boolean Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Boolean Type ."));
 		return false;
 	}
 
 }
 
-bool UnlohmannjsonBPLibrary::IsObjectSelf(const FJSON& JSON)
+bool UnlohmannjsonBPLibrary::IsObjectSelf(const FJSON& J)
 {
-	return JSON.data.is_object();
+	return J.data->is_object();
 }
 
-bool UnlohmannjsonBPLibrary::IsObject(const FJSON& JSON, const FString& key)
+bool UnlohmannjsonBPLibrary::IsObject(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	json b = JSON.data[k];
+	json b = (*J.data)[k];
 	return b.is_object();
 }
 
-FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& JSON, const FString& key)
+FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	if (JSON.data.contains(k))
+	if (J.data->contains(k))
 	{
-		json b = JSON.data[k];
+		json b = (*J.data)[k];
 		check(b.is_object());
 		if (b.is_object()) {
 			json result = b.template get<json>();
 			return FJSON(result);
 		}
 		else {
-			UE_LOG(LogTemp, Log, TEXT("JSON GetObject :  No Object Type ."));
+			UE_LOG(LogTemp, Log, TEXT("J GetObject :  No Object Type ."));
 			return FJSON();
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("JSON GetObject :  Key-Absent."));
+		UE_LOG(LogTemp, Log, TEXT("J GetObject :  Key-Absent."));
 		return FJSON();
 	}
 }
 
-bool UnlohmannjsonBPLibrary::IsArraySelf(const FJSON& JSON)
+bool UnlohmannjsonBPLibrary::IsArraySelf(const FJSON& J)
 {
-	return JSON.data.is_array();
+	return J.data->is_array();
 }
 
-bool UnlohmannjsonBPLibrary::IsArray(const FJSON& JSON, const FString& key)
+bool UnlohmannjsonBPLibrary::IsArray(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	json b = JSON.data[k];
+	json b = (*J.data)[k];
 	return b.is_array();
 }
 
-FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& JSON, const FString& key)
+FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	json b = JSON.data[k];
+	json b = (*J.data)[k];
 	check(b.is_array());
 	if (b.is_array()) {
 		json result = b.template get<json>();
 		return FJSON(result);
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  No Array Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Array Type ."));
 		return FJSON();
 	}
 }
 
-FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& JSON, int32 Index)
+FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& J, int32 Index)
 {
-	check(JSON.data.is_array());
-	if (JSON.data.is_array())
+	check(J.data->is_array());
+	if (J.data->is_array())
 	{
-		json b = JSON.data[Index];
+		json b = (*J.data)[Index];
 		return FJSON(b);
 	}
 	else {
@@ -228,12 +231,12 @@ FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& JSON, int32 Index)
 	}
 }
 
-int UnlohmannjsonBPLibrary::GetArraySize(const FJSON& JSON)
+int UnlohmannjsonBPLibrary::GetArraySize(const FJSON& J)
 {
-	check(JSON.data.is_array());
-	if (JSON.data.is_array())
+	check(J.data->is_array());
+	if (J.data->is_array())
 	{
-		return JSON.data.size();
+		return J.data->size();
 	}
 	else
 	{
@@ -241,63 +244,63 @@ int UnlohmannjsonBPLibrary::GetArraySize(const FJSON& JSON)
 	}
 }
 
-FString UnlohmannjsonBPLibrary::ToString(const FJSON& JSON)
+FString UnlohmannjsonBPLibrary::ToString(const FJSON& J)
 {
-	check(JSON.data.is_string());
-	if (JSON.data.is_string()) {
-		string result = JSON.data.template get<string>();
+	check(J.data->is_string());
+	if (J.data->is_string()) {
+		string result = J.data->template get<string>();
 		return result.c_str();
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON ToString :  No String Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J ToString :  No String Type ."));
 		return "";
 	}
 }
 
-float UnlohmannjsonBPLibrary::ToFloat(const FJSON& JSON)
+float UnlohmannjsonBPLibrary::ToFloat(const FJSON& J)
 {
-	check(JSON.data.is_number_float());
-	if (JSON.data.is_number_float()) {
-		float result = JSON.data.template get<float>();
+	check(J.data->is_number_float());
+	if (J.data->is_number_float()) {
+		float result = J.data->template get<float>();
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON ToFloat :  No Float Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J ToFloat :  No Float Type ."));
 		return 0.0f;
 	}
 }
 
-int UnlohmannjsonBPLibrary::ToInteger(const FJSON& JSON)
+int UnlohmannjsonBPLibrary::ToInteger(const FJSON& J)
 {
-	check(JSON.data.is_number_integer());
-	if (JSON.data.is_number_integer()) {
-		float result = JSON.data.template get<int>();
+	check(J.data->is_number_integer());
+	if (J.data->is_number_integer()) {
+		float result = J.data->template get<int>();
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON ToInteger :  No Integer Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J ToInteger :  No Integer Type ."));
 		return 0;
 	}
 }
 
-bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& JSON)
+bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& J)
 {
-	check(JSON.data.is_boolean());
-	if (JSON.data.is_boolean()) {
-		bool result = JSON.data.template get<bool>();
+	check(J.data->is_boolean());
+	if (J.data->is_boolean()) {
+		bool result = J.data->template get<bool>();
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON ToBoolean :  No Boolean Type ."));
+		UE_LOG(LogTemp, Log, TEXT("J ToBoolean :  No Boolean Type ."));
 		return false;
 	}
 }
 
-FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& JSON, const FString& key, const FJSON& field)
+FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& J, const FString& key, const FJSON& field)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	//JSON.SetField(key, field);
-	return JSON;
+	//J.SetField(key, field);
+	return J;
 }
 
 FString UnlohmannjsonBPLibrary::BinaryDecode(const FString& Message)
