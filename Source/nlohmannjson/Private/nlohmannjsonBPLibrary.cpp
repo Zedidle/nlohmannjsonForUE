@@ -3,6 +3,30 @@
 #include "nlohmannjsonBPLibrary.h"
 #include "nlohmannjson.h"
 
+
+
+FJSON FJSON::SetField(const FString& key, const FString& field)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	if (this->data.is_object())
+	{
+		this->data[k] = json::parse(TCHAR_TO_UTF8(*field));
+	}
+	else if (this->data.is_null())
+	{
+		this->data = {
+			{ k , TCHAR_TO_UTF8(*field) }
+		};
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("It's not a valid type can set a key-field"));
+	}
+	return *this;
+}
+
+
+
 UnlohmannjsonBPLibrary::UnlohmannjsonBPLibrary(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
@@ -59,12 +83,12 @@ FString UnlohmannjsonBPLibrary::JSONToString(const FJSON& JSON)
 	return Message;
 }
 
-FString UnlohmannjsonBPLibrary::GetString(const FJSON& JSON, const FString& str)
+FString UnlohmannjsonBPLibrary::GetString(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	if (JSON.data.contains(key))
+	string k = TCHAR_TO_UTF8(*key);
+	if (JSON.data.contains(k))
 	{
-		json b = JSON.data[key];
+		json b = JSON.data[k];
 
 		check(b.is_string());
 		if (b.is_string()) {
@@ -82,10 +106,10 @@ FString UnlohmannjsonBPLibrary::GetString(const FJSON& JSON, const FString& str)
 	}
 }
 
-float UnlohmannjsonBPLibrary::GetFloat(const FJSON& JSON, const FString& str)
+float UnlohmannjsonBPLibrary::GetFloat(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	json b = JSON.data[key];
+	string k = TCHAR_TO_UTF8(*key);
+	json b = JSON.data[k];
 	check(b.is_number_float());
 	if (b.is_number_float()) {
 		float result = b.template get<float>();
@@ -97,10 +121,10 @@ float UnlohmannjsonBPLibrary::GetFloat(const FJSON& JSON, const FString& str)
 	}
 }
 
-int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& JSON, const FString& str)
+int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	json b = JSON.data[key];
+	string k = TCHAR_TO_UTF8(*key);
+	json b = JSON.data[k];
 	check(b.is_number_integer());
 	if (b.is_number_integer()) {
 		int32 result = b.template get<int32>();
@@ -113,10 +137,10 @@ int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& JSON, const FString& str)
 
 }
 
-bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& JSON, const FString& str)
+bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	json b = JSON.data[key];
+	string k = TCHAR_TO_UTF8(*key);
+	json b = JSON.data[k];
 	check(b.is_boolean());
 	if (b.is_boolean()) {
 		bool result = b.template get<bool>();
@@ -134,19 +158,19 @@ bool UnlohmannjsonBPLibrary::IsObjectSelf(const FJSON& JSON)
 	return JSON.data.is_object();
 }
 
-bool UnlohmannjsonBPLibrary::IsObject(const FJSON& JSON, const FString& str)
+bool UnlohmannjsonBPLibrary::IsObject(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	json b = JSON.data[key];
+	string k = TCHAR_TO_UTF8(*key);
+	json b = JSON.data[k];
 	return b.is_object();
 }
 
-FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& JSON, const FString& str)
+FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	if (JSON.data.contains(key))
+	string k = TCHAR_TO_UTF8(*key);
+	if (JSON.data.contains(k))
 	{
-		json b = JSON.data[key];
+		json b = JSON.data[k];
 		check(b.is_object());
 		if (b.is_object()) {
 			json result = b.template get<json>();
@@ -169,17 +193,17 @@ bool UnlohmannjsonBPLibrary::IsArraySelf(const FJSON& JSON)
 	return JSON.data.is_array();
 }
 
-bool UnlohmannjsonBPLibrary::IsArray(const FJSON& JSON, const FString& str)
+bool UnlohmannjsonBPLibrary::IsArray(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	json b = JSON.data[key];
+	string k = TCHAR_TO_UTF8(*key);
+	json b = JSON.data[k];
 	return b.is_array();
 }
 
-FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& JSON, const FString& str)
+FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& JSON, const FString& key)
 {
-	string key = TCHAR_TO_UTF8(*str);
-	json b = JSON.data[key];
+	string k = TCHAR_TO_UTF8(*key);
+	json b = JSON.data[k];
 	check(b.is_array());
 	if (b.is_array()) {
 		json result = b.template get<json>();
@@ -269,9 +293,15 @@ bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& JSON)
 	}
 }
 
+FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& JSON, const FString& key, const FJSON& field)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	//JSON.SetField(key, field);
+	return JSON;
+}
+
 FString UnlohmannjsonBPLibrary::BinaryDecode(const FString& Message)
 {
 		FString DecodedMessage = FString(UTF8_TO_TCHAR(TCHAR_TO_UTF8(*Message)));
-		UE_LOG(LogTemp, Log, TEXT("Received message from JavaScript: %s"), *DecodedMessage);
 		return DecodedMessage;
 }
