@@ -42,6 +42,9 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Print JSON", Keywords = "nlohmannjson"), Category = "nlohmannjson")
 	static const FJSON& PrintJSON(const FJSON& JSON);
 
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Get JSON Type", Keywords = "nlohmannjson"), Category = "nlohmannjson")
+	static FString GetJSONType(const FJSON& JSON);
+
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Print JSON Type", Keywords = "nlohmannjson"), Category = "nlohmannjson")
 	static void PrintJSONType(const FJSON& JSON);
 

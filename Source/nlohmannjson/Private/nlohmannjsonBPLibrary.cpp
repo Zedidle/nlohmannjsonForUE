@@ -44,6 +44,12 @@ const FJSON& UnlohmannjsonBPLibrary::PrintJSON(const FJSON& JSON)
 	return JSON;
 }
 
+FString UnlohmannjsonBPLibrary::GetJSONType(const FJSON& JSON)
+{
+	string s = JSON.data.type_name();
+	return s.c_str();
+}
+
 void UnlohmannjsonBPLibrary::PrintJSONType(const FJSON& JSON)
 {
 	string s = JSON.data.type_name();
