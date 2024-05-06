@@ -263,8 +263,7 @@ FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& J, int32 Index)
 	check(J.data->is_array());
 	if (J.data->is_array())
 	{
-		json j = (*J.data)[Index];
-		return FJSON(j);
+		return FJSON((*J.data)[Index]);
 	}
 	else {
 		return FJSON();

@@ -42,7 +42,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	static FJSON& Loadjsonfile(const FString& file);
 
 	/* Parse a string to json, it's should be vliad json string. */
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Prase JSON"), Category = "njson")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Parse JSON"), Category = "njson")
 	static FJSON Parse(const FString& content);
 
 	/* Handle  UTF8 */
