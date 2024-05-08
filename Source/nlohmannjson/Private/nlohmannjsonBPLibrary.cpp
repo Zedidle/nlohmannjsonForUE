@@ -10,15 +10,12 @@ const FJSON FJSON::SetField(const FString& key, const FJSON& field)
 	string k = TCHAR_TO_UTF8(*key);
 	if (data->is_object())
 	{
-		//(*data)[k] = json::parse(TCHAR_TO_UTF8(*field));
 		(*data)[k] = *(field.data);
 	}
 	else if (data->is_null())
 	{
-		//(*data) = {
-		//	{ k , TCHAR_TO_UTF8(*field) }
-		//};
-		(*data) = { k, *(field.data) };
+		data = new json;
+		(*data)[k] = *(field.data);
 	}
 	else
 	{
@@ -43,30 +40,19 @@ FJSON& UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
 		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::loadjsonfile load error: %s"), *file);
 		return *(new FJSON());
 	}
-
-	json* ptr_j = new json(json::parse(f));
+	json* ptr_j = new json(json::parse(f, nullptr, false));
 	FJSON* J = new FJSON(*ptr_j);
+	if (ptr_j->is_discarded()) {
+		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::loadjsonfile load error: %s , incorrect data format. "), *file);
+	}
 	f.close();
 	return *J;
-
-
-	//check(json::accept( f ));
-	//if (json::accept( f ))
-	//{
-	//	json* ptr_j = new json(json::parse(f));
-	//	FJSON* J = new FJSON(*ptr_j);
-	//	f.close();
-	//	return *J;
-	//}
-	//f.close();
-	//UE_LOG(LogTemp, Error, TEXT("%s is an issue with the JSON structure read"), *file);
-	//return *(new FJSON());
 }
 
 
 FJSON UnlohmannjsonBPLibrary::Parse(const FString& content)
 {
-	json* j = new json(json::parse(TCHAR_TO_UTF8(*content)));
+	json* j = new json(json::parse(TCHAR_TO_UTF8(*content), nullptr, false));
 	return FJSON(j);
 }
 
@@ -249,7 +235,7 @@ FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key)
 	json j = (*J.data)[k];
 	check(j.is_array());
 	if (j.is_array()) {
-		json result = j.template get<json>();
+		json* result = new json(j.template get<json>());
 		return FJSON(result);
 	}
 	else {
