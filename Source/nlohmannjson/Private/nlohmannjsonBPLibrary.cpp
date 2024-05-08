@@ -41,7 +41,7 @@ FJSON& UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
 		return *(new FJSON());
 	}
 	json* ptr_j = new json(json::parse(f, nullptr, false));
-	FJSON* J = new FJSON(*ptr_j);
+	FJSON* J = new FJSON(ptr_j);
 	if (ptr_j->is_discarded()) {
 		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::loadjsonfile load error: %s , incorrect data format. "), *file);
 	}
@@ -52,8 +52,12 @@ FJSON& UnlohmannjsonBPLibrary::Loadjsonfile(const FString& file)
 
 FJSON UnlohmannjsonBPLibrary::Parse(const FString& content)
 {
-	json* j = new json(json::parse(TCHAR_TO_UTF8(*content), nullptr, false));
-	return FJSON(j);
+	json* ptr_j = new json(json::parse(TCHAR_TO_UTF8(*content), nullptr, false));
+	FJSON* J = new FJSON(ptr_j);
+	if (ptr_j->is_discarded()) {
+		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::loadjsonfile load error: %s , incorrect data format. "), *content);
+	}
+	return *J;
 }
 
 FString UnlohmannjsonBPLibrary::BinaryDecode(const FString& Message)
@@ -332,20 +336,17 @@ bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& J)
 FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& J, const FString& key, const FJSON& field)
 {
 	string k = TCHAR_TO_UTF8(*key);
-	if(J.data->is_null())
+	if (J.data->is_object())
+	{
+		(*J.data)[k] = *(field.data);
+	}
+	else if(J.data->is_null())
 	{
 		(*J.data)[k] =  *(field.data);
 	}
 	else
 	{
-		if (J.data->is_object())
-		{
-			(*J.data)[k] = *(field.data);
-		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("It's not a valid type can set a key-field"));
-		}
+		UE_LOG(LogTemp, Log, TEXT("It's not a valid type can set a key-field"));
 	}
 	
 	return J;
@@ -363,29 +364,44 @@ FJSON UnlohmannjsonBPLibrary::MultiSetJSONFields(const FJSON& J, const TMap<FStr
 
 FJSON UnlohmannjsonBPLibrary::MakeJSONString(const FString& S)
 {
-	return Parse(S);
+	json* ptr_j = new json(*S);
+	return FJSON(ptr_j);
 }
 
 
 FJSON UnlohmannjsonBPLibrary::MakeJSONInt(const int I)
 {
-	FString S = FString::FromInt(I);
-	return MakeJSONString(S);
+	json* ptr_j = new json(I);
+	return FJSON(ptr_j);
 }
 
 FJSON UnlohmannjsonBPLibrary::MakeJSONFloat(const float F)
 {
-	FString S = FString::SanitizeFloat(F);
-	return MakeJSONString(S);
+	json* ptr_j = new json(F);
+	return FJSON(ptr_j);
 }
 
 FJSON UnlohmannjsonBPLibrary::MakeJSONBool(const bool B)
 {
-	FString S = B ? TEXT("true") : TEXT("false");
-	//FString S = B ? FString::FromInt(1) : FString::FromInt(0);
-	return MakeJSONString(S);
+	json* ptr_j = new json(B);
+	return FJSON(ptr_j);
 }
 
+FJSON UnlohmannjsonBPLibrary::MakeJSONArrayString(const TArray<FString>& ArrayS)
+{
+	json* ptr_j = new json;
+	for (const FString& S : ArrayS)
+	{
+		ptr_j->push_back(*S);
+	}
+	return FJSON(ptr_j);
+}
+
+FJSON UnlohmannjsonBPLibrary::JSONArrayPushBack(const FJSON& J, const FJSON& J2)
+{
+	J.data->push_back(*(J2.data));
+	return J;
+}
 
 void UnlohmannjsonBPLibrary::SaveJSON(const FJSON& J, const FString& filepath)
 {

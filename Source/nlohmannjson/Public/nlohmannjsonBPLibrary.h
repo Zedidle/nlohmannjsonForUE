@@ -141,6 +141,11 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Bool", CompactNodeTitle = "JSON Bool"), Category = "njson")
 	static FJSON MakeJSONBool(const bool B);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array", CompactNodeTitle = "JSON Array String"), Category = "njson")
+	static FJSON MakeJSONArrayString(const TArray<FString>& ArrayS);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "JSON PushBack As Array", CompactNodeTitle = "Push Back"), Category = "njson")
+	static FJSON JSONArrayPushBack(const FJSON& J, const FJSON& J2);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Keys"), Category = "njson")
 	static TArray<FString> GetJSONKeys(const FJSON& J);
