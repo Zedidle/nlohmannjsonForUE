@@ -39,6 +39,6 @@ Features:
 <br>$~~~$ Linux: Yes
 <br>$~~~$ Mac: Yes
 <br>Documentation: <https://github.com/Zedidle/nlohmannjsonForUE>
-<br>Important/Additional Notes: Plugin use the GitHub 40K Star JsonLib. This ensures flexibility, stability, compatibility.
+<br>Important/Additional Notes: Plugin use the GitHub 40K Star JsonLib. This ensures flexibility, stability, compatibility, performance.
 
 
