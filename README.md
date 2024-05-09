@@ -11,7 +11,7 @@
 ![alt text](Resources/image.png)
 ![alt text](Resources/image-1.png)
 
-
+<br><br><br>
 
 ----
 # Epic Unreal Store Information
@@ -19,18 +19,26 @@
 ## Brief
 A Json Plugin for UE extend by Github 40K star Json Lib.
 
+<br>
+
 ## Details Description
 Use BlueprintFunctionLibrary package all nlohmannjson's functions, easy to use in blueprint flexibly.
 
-## Technical Details
-特点：（请附上完整、全面的产品功能列表）<br>
-代码模块：（请包括每个插件模块及其模块类型（运行时、编辑器等）的完整列表）<br>
-蓝图数量：<br>
-C++ 类的数量：<br>
-网络复制：否<br>
-支持的开发平台：Windows<br>
-支持的目标构建平台：Windows<br>
-文档：https://github.com/Zedidle/nlohmannjsonForUE<br>
-示例项目：（将这些括号替换为链接，以下载依赖于您的插件但不分发实际插件的示例项目）<br>
-重要/附注事项：
+<br>
+
+## TECHNICAL INFORMATION
+Features: 
+- Construct Json Object by loadfile, parse string or step by step 
+- Save Json Object as string to a file
+- Supports maximum flexibility in constructing arrays
+- Support types of string, int, float, bool, object, array to addition, deletion, modification and query;
+
+<br>Number of Blueprints: 32+
+<br>Supported Development Platforms:
+<br>$~~~$ Windows: Yes
+<br>$~~~$ Linux: Yes
+<br>$~~~$ Mac: Yes
+<br>Documentation: <https://github.com/Zedidle/nlohmannjsonForUE>
+<br>Important/Additional Notes: Plugin use the GitHub 40K Star JsonLib. This ensures flexibility, stability, compatibility.
+
 
