@@ -243,7 +243,7 @@ FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key)
 		return FJSON(result);
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Array Type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  No Array Type ."));
 		return FJSON();
 	}
 }
@@ -281,7 +281,7 @@ FString UnlohmannjsonBPLibrary::ToString(const FJSON& J)
 		return result.c_str();
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J ToString :  No String Type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON ToString :  No String Type ."));
 		return "";
 	}
 }
@@ -294,7 +294,7 @@ float UnlohmannjsonBPLibrary::ToFloat(const FJSON& J)
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J ToFloat :  No Float Type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON ToFloat :  No Float Type ."));
 		return 0.0f;
 	}
 }
@@ -307,7 +307,7 @@ int UnlohmannjsonBPLibrary::ToInteger(const FJSON& J)
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J ToInteger :  No Integer Type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON ToInteger :  No Integer Type ."));
 		return 0;
 	}
 }
@@ -329,7 +329,7 @@ bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& J)
 			return false;
 		}
 	}
-	UE_LOG(LogTemp, Log, TEXT("J ToBoolean :  No Boolean Type ."));
+	UE_LOG(LogTemp, Error, TEXT("J ToBoolean :  No Boolean Type ."));
 	return false;
 }
 
@@ -346,7 +346,7 @@ FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& J, const FString& key, c
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("It's not a valid type can set a key-field"));
+		UE_LOG(LogTemp, Error, TEXT("It's not a valid type can set a key-field"));
 	}
 	
 	return J;
@@ -397,9 +397,47 @@ FJSON UnlohmannjsonBPLibrary::MakeJSONArrayString(const TArray<FString>& ArrayS)
 	return FJSON(ptr_j);
 }
 
+FJSON UnlohmannjsonBPLibrary::MakeJSONArrayInt(const TArray<int32>& ArrayI)
+{
+	json* ptr_j = new json;
+	for (const int32& I : ArrayI)
+	{
+		ptr_j->push_back(I);
+	}
+	return FJSON(ptr_j);
+}
+
+FJSON UnlohmannjsonBPLibrary::MakeJSONArrayFloat(const TArray<float>& ArrayF)
+{
+	json* ptr_j = new json;
+	for (const float& F : ArrayF)
+	{
+		ptr_j->push_back(F);
+	}
+	return FJSON(ptr_j);
+}
+
+FJSON UnlohmannjsonBPLibrary::MakeJSONArrayBool(const TArray<bool>& ArrayB)
+{
+	json* ptr_j = new json;
+	for (const bool& B : ArrayB)
+	{
+		ptr_j->push_back(B);
+	}
+	return FJSON(ptr_j);
+}
+
 FJSON UnlohmannjsonBPLibrary::JSONArrayPushBack(const FJSON& J, const FJSON& J2)
 {
-	J.data->push_back(*(J2.data));
+	if (J.data->is_null() || J.data->is_array())
+	{
+		J.data->push_back(*(J2.data));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::JSONArrayPushBack error : the former isn't valid type to push. "));
+	}
+
 	return J;
 }
 
