@@ -83,15 +83,10 @@ const FJSON& UnlohmannjsonBPLibrary::PrintJSON(const FJSON& J)
 	return J;
 }
 
-void UnlohmannjsonBPLibrary::PrintJSONType(const FJSON& J)
+FString UnlohmannjsonBPLibrary::GetJSONType(const FJSON& J)
 {
 	string s = J.data->type_name();
-	UE_LOG(LogTemp, Log, TEXT("Print J Type: %s"), UTF8_TO_TCHAR(s.c_str()));
-
-	const FString Message = FString::Printf(TEXT("Print J Type: %s"), UTF8_TO_TCHAR(s.c_str()));
-	if (GEngine != nullptr) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Emerald, *Message);
-	}
+	return s.c_str();
 }
 
 FString UnlohmannjsonBPLibrary::JSONToString(const FJSON& J)
@@ -149,7 +144,7 @@ float UnlohmannjsonBPLibrary::GetFloat(const FJSON& J, const FString& key)
 		return f;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Float Type ."));
+		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  No Float Type ."));
 		return 0.0f;
 	}
 }
@@ -164,7 +159,7 @@ int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& J, const FString& key)
 		return i;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Integer Type ."));
+		UE_LOG(LogTemp, Log, TEXT("JSON GetInteger :  No Integer Type ."));
 		return 0;
 	}
 
@@ -180,7 +175,7 @@ bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& J, const FString& key)
 		return b;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("J GetFloat :  No Boolean Type ."));
+		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  No Boolean Type ."));
 		return false;
 	}
 
@@ -210,13 +205,13 @@ FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key)
 			return FJSON(result);
 		}
 		else {
-			UE_LOG(LogTemp, Log, TEXT("J GetObject :  No Object Type ."));
+			UE_LOG(LogTemp, Warning, TEXT("JSON GetObject :  No Object Type ."));
 			return FJSON();
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("J GetObject :  Key-Absent."));
+		UE_LOG(LogTemp, Warning, TEXT("JJSON GetObject :  Key-Absent."));
 		return FJSON();
 	}
 }
@@ -375,7 +370,7 @@ FJSON UnlohmannjsonBPLibrary::MakeJSONInt(const int I)
 	return FJSON(ptr_j);
 }
 
-FJSON UnlohmannjsonBPLibrary::MakeJSONFloat(const float F)
+FJSON UnlohmannjsonBPLibrary::MakeJSONFloat(const double F)
 {
 	json* ptr_j = new json(F);
 	return FJSON(ptr_j);
@@ -384,6 +379,16 @@ FJSON UnlohmannjsonBPLibrary::MakeJSONFloat(const float F)
 FJSON UnlohmannjsonBPLibrary::MakeJSONBool(const bool B)
 {
 	json* ptr_j = new json(B);
+	return FJSON(ptr_j);
+}
+
+FJSON UnlohmannjsonBPLibrary::MakeJSONArray(const TArray<FJSON>& ArrayJ)
+{
+	json* ptr_j = new json;
+	for (const FJSON& J : ArrayJ)
+	{
+		ptr_j->push_back((*J.data));
+	}
 	return FJSON(ptr_j);
 }
 

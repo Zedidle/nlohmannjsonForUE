@@ -54,8 +54,8 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	static const FJSON& PrintJSON(const FJSON& J);
 
 	/* Print JSON's datatype */
-	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Print JSON Type", CompactNodeTitle = "Type"), Category = "njson")
-	static void PrintJSONType(const FJSON& J);
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Type", CompactNodeTitle = "Type"), Category = "njson")
+	static FString GetJSONType(const FJSON& J);
 
 	/* Convert JSON as string */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "ToPrettyString"), Category = "njson")
@@ -136,10 +136,13 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	static FJSON MakeJSONInt(const int I);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Float", CompactNodeTitle = "JSON Float"), Category = "njson")
-	static FJSON MakeJSONFloat(const float F);
+	static FJSON MakeJSONFloat(const double F);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Bool", CompactNodeTitle = "JSON Bool"), Category = "njson")
 	static FJSON MakeJSONBool(const bool B);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array", CompactNodeTitle = "Array JSON"), Category = "njson")
+	static FJSON MakeJSONArray(const TArray<FJSON>& ArrayS);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array String", CompactNodeTitle = "Array String"), Category = "njson")
 	static FJSON MakeJSONArrayString(const TArray<FString>& ArrayS);
@@ -153,7 +156,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array Bool", CompactNodeTitle = "Array Bool"), Category = "njson")
 	static FJSON MakeJSONArrayBool(const TArray<bool>& ArrayB);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "JSON PushBack As Array", CompactNodeTitle = "Push Back"), Category = "njson")
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "JSON PushBack As Array", CompactNodeTitle = "Push Back"), Category = "njson")
 	static FJSON JSONArrayPushBack(const FJSON& J, const FJSON& J2);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Keys"), Category = "njson")
