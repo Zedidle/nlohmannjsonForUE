@@ -85,7 +85,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	static bool IsObject(const FJSON& J, const FString& key);
 	/* Get JSON's object field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Object"), Category = "njson")
-	static FJSON GetObject(const FJSON& J, const FString& key);
+	static FJSON GetObject(const FJSON& J, const FString& key, bool copy);
 
 	/* Judge if a JSON is array type */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Is JSON Array Self"), Category = "njson")
@@ -105,6 +105,13 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array Element", CompactNodeTitle = "GetElement"), Category = "njson")
 	static FJSON GetArrayElement(const FJSON& J, int32 Index);
 
+	/* Remove element from a JSON array given an index */
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Remove JSON Array Element at Index", CompactNodeTitle = "EraseElement"), Category = "njson")
+	static FJSON EraseArrayElementAtIndex(const FJSON& J, int32 Index);
+
+	/* Remove element from a JSON array given an index */
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Remove JSON Object Filed by Key", CompactNodeTitle = "RemoveKey"), Category = "njson")
+	static FJSON RemoveObjectFieldByKey(const FJSON& J, const FString& key);
 
 	/* Convert JSON to string type data */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "JSON To Value String", CompactNodeTitle = "ToString"), Category = "njson")

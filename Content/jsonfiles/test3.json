@@ -1,7 +1,6 @@
 {
     "active": true,
     "formed": 2016,
-    "homeTown": "Metro City",
     "members": [
         {
             "age": 29,
@@ -22,18 +21,6 @@
                 "Superhuman reflexes"
             ],
             "secretIdentity": "Jane Wilson"
-        },
-        {
-            "age": 1000000,
-            "name": "Eternal Flame",
-            "powers": [
-                "Immortality",
-                "Heat Immunity",
-                "Inferno",
-                "Teleportation",
-                "Interdimensional travel"
-            ],
-            "secretIdentity": "Unknown"
         }
     ],
     "secretBase": "Super tower",

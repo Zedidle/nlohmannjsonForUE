@@ -1,1 +1,27 @@
-{"canfly":false,"high":180,"name":"aaa","speed":998.885986328125}
+{
+    "active": true,
+    "formed": 2016,
+    "members": [
+        {
+            "age": 29,
+            "name": "Molecule Man",
+            "powers": [
+                "Radiation resistance",
+                "Turning tiny",
+                "Radiation blast"
+            ],
+            "secretIdentity": "Dan Jukes"
+        },
+        {
+            "age": 39,
+            "name": "Madame Uppercut",
+            "powers": [
+                "Million tonne punch",
+                "Damage resistance",
+                "Superhuman reflexes"
+            ],
+            "secretIdentity": "Jane Wilson"
+        }
+    ],
+    "squadName": "Super hero squad"
+}
