@@ -45,7 +45,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Parse JSON"), Category = "njson")
 	static FJSON Parse(const FString& content);
 
-	/* Handle  UTF8 */
+	/* Handle UTF8 */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "BinaryDecode"), Category = "njson")
 	static FString BinaryDecode(const FString& Message);
 
@@ -53,7 +53,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Print JSON"), Category = "njson")
 	static const FJSON& PrintJSON(const FJSON& J);
 
-	/* Print JSON's datatype */
+	/* Get JSON's datatype */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Type", CompactNodeTitle = "Type"), Category = "njson")
 	static FString GetJSONType(const FJSON& J);
 
@@ -95,7 +95,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	static bool IsArray(const FJSON& J, const FString& key);
 	/* Get JSON's array field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array"), Category = "njson")
-	static FJSON GetArray(const FJSON& J, const FString& key);
+	static FJSON GetArray(const FJSON& J, const FString& key, bool copy);
 
 	/* Get JSON array's length */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array Size", CompactNodeTitle = "Size"), Category = "njson")
@@ -109,7 +109,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Remove JSON Array Element at Index", CompactNodeTitle = "EraseElement"), Category = "njson")
 	static FJSON EraseArrayElementAtIndex(const FJSON& J, int32 Index);
 
-	/* Remove element from a JSON array given an index */
+	/* Remove a JSON object's field by given key */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Remove JSON Object Filed by Key", CompactNodeTitle = "RemoveKey"), Category = "njson")
 	static FJSON RemoveObjectFieldByKey(const FJSON& J, const FString& key);
 
@@ -129,46 +129,59 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "JSON To Value Boolean", CompactNodeTitle = "ToBool"), Category = "njson")
 	static bool ToBoolean(const FJSON& J);
 	
+	/* Set JSON Field with a key */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set Filed"), Category = "njson")
 	static FJSON SetJSONField(const FJSON& J, const FString& key, const FJSON& field);
 
+	/* Set JSON Fields with multi keys */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Set Fileds"), Category = "njson")
 	static FJSON MultiSetJSONFields(const FJSON& J, const TMap<FString, FJSON>& kf);
 
-
+	/* Construct JSON of string type with a string */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON String", CompactNodeTitle = "JSON String"), Category = "njson")
 	static FJSON MakeJSONString(const FString& S);
 
+	/* Construct JSON of int type with a integer */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Int", CompactNodeTitle = "JSON Int"), Category = "njson")
 	static FJSON MakeJSONInt(const int I);
 
+	/* Construct JSON of float type with a float */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Float", CompactNodeTitle = "JSON Float"), Category = "njson")
 	static FJSON MakeJSONFloat(const double F);
 
+	/* Construct JSON of bool type with a boolean */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Bool", CompactNodeTitle = "JSON Bool"), Category = "njson")
 	static FJSON MakeJSONBool(const bool B);
 
+	/* Make JSON Array with Multi JSON */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array", CompactNodeTitle = "Array JSON"), Category = "njson")
-	static FJSON MakeJSONArray(const TArray<FJSON>& ArrayS);
+	static FJSON MakeJSONArray(const TArray<FJSON>& ArrayJ);
 
+	/* Make JSON Array with Multi String */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array String", CompactNodeTitle = "Array String"), Category = "njson")
 	static FJSON MakeJSONArrayString(const TArray<FString>& ArrayS);
 
+	/* Make JSON Array with Multi Integer */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array Int", CompactNodeTitle = "Array Int"), Category = "njson")
 	static FJSON MakeJSONArrayInt(const TArray<int32>& ArrayI);
 
+	/* Make JSON Array with Multi float */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array Float", CompactNodeTitle = "Array Float"), Category = "njson")
 	static FJSON MakeJSONArrayFloat(const TArray<float>& ArrayF);
 
+	/* Make JSON Array with Multi Boolean */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array Bool", CompactNodeTitle = "Array Bool"), Category = "njson")
 	static FJSON MakeJSONArrayBool(const TArray<bool>& ArrayB);
 
+	/* Add element to the end of the JSON Array */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "JSON PushBack As Array", CompactNodeTitle = "Push Back"), Category = "njson")
 	static FJSON JSONArrayPushBack(const FJSON& J, const FJSON& J2);
 
+	/* Get JSON Object's keys  or  JSON Array's Indexes */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Keys"), Category = "njson")
 	static TArray<FString> GetJSONKeys(const FJSON& J);
 
+	/* Save JSON as file to the given filepath */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Save JSON"), Category = "njson")
 	static void SaveJSON(const FJSON& J, const FString& filepath);
 

@@ -193,7 +193,7 @@ bool UnlohmannjsonBPLibrary::IsObject(const FJSON& J, const FString& key)
 	return j.is_object();
 }
 
-FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key, bool copy=true)
+FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key, bool copy=false)
 {
 	string k = TCHAR_TO_UTF8(*key);
 	if (J.data->contains(k))
@@ -235,14 +235,22 @@ bool UnlohmannjsonBPLibrary::IsArray(const FJSON& J, const FString& key)
 	return j.is_array();
 }
 
-FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key)
+FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key, bool copy=false)
 {
 	string k = TCHAR_TO_UTF8(*key);
 	json j = (*J.data)[k];
 	check(j.is_array());
-	if (j.is_array()) {
-		json* result = new json(j.template get<json>());
-		return FJSON(result);
+	if (j.is_array()) 
+	{
+		if (copy)
+		{
+			json* result = new json(j.template get<json>());
+			return FJSON(result);
+		}
+		else
+		{
+			return FJSON(&(*J.data)[k]);
+		}
 	}
 	else {
 		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  wrong type ."));
@@ -266,11 +274,18 @@ FJSON UnlohmannjsonBPLibrary::EraseArrayElementAtIndex(const FJSON& J, int32 Ind
 {
 	if (J.data->is_array())
 	{
-		J.data->erase(Index);
+		if (Index >= 0 && J.data->size() > Index)
+		{
+			J.data->erase(Index);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Error, TEXT("JSON EraseArrayElementAtIndex :  invalid index ."));
+		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("JSON RemoveArrayElement :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON EraseArrayElementAtIndex :  wrong type ."));
 	}
 	return J;
 }
@@ -284,7 +299,7 @@ FJSON UnlohmannjsonBPLibrary::RemoveObjectFieldByKey(const FJSON& J, const FStri
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("JSON RemoveObjectElement :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON RemoveObjectFieldByKey :  wrong type ."));
 	}
 	return J;
 }
