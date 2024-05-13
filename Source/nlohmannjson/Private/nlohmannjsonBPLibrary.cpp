@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 5THsama, Inc. All Rights Reserved.
 
 #include "nlohmannjsonBPLibrary.h"
 #include "nlohmannjson.h"

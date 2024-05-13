@@ -1,4 +1,4 @@
-// Author: Zen5th
+// Copyright 5THsama, Inc. All Rights Reserved.
 
 #pragma once
 
