@@ -167,7 +167,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 
 	/* Make JSON Array with Multi float */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array Float", CompactNodeTitle = "Array Float"), Category = "njson")
-	static FJSON MakeJSONArrayFloat(const TArray<float>& ArrayF);
+	static FJSON MakeJSONArrayFloat(const TArray<double>& ArrayF);
 
 	/* Make JSON Array with Multi Boolean */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Make JSON Array Bool", CompactNodeTitle = "Array Bool"), Category = "njson")

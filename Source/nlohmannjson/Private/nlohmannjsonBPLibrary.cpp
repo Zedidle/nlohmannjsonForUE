@@ -313,6 +313,7 @@ int UnlohmannjsonBPLibrary::GetArraySize(const FJSON& J)
 	}
 	else
 	{
+		UE_LOG(LogTemp, Error, TEXT("JSON GetArraySize :  wrong type ."));
 		return 0;
 	}
 }
@@ -390,7 +391,7 @@ FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& J, const FString& key, c
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("It's not a valid type can set a key-field"));
+		UE_LOG(LogTemp, Error, TEXT("JSON SetJSONField :  wrong type ."));
 	}
 	
 	return J;
@@ -461,10 +462,10 @@ FJSON UnlohmannjsonBPLibrary::MakeJSONArrayInt(const TArray<int32>& ArrayI)
 	return FJSON(ptr_j);
 }
 
-FJSON UnlohmannjsonBPLibrary::MakeJSONArrayFloat(const TArray<float>& ArrayF)
+FJSON UnlohmannjsonBPLibrary::MakeJSONArrayFloat(const TArray<double>& ArrayF)
 {
 	json* ptr_j = new json;
-	for (const float& F : ArrayF)
+	for (const double& F : ArrayF)
 	{
 		ptr_j->push_back(F);
 	}
@@ -489,7 +490,7 @@ FJSON UnlohmannjsonBPLibrary::JSONArrayPushBack(const FJSON& J, const FJSON& J2)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("UnlohmannjsonBPLibrary::JSONArrayPushBack error : the former isn't valid type to push. "));
+		UE_LOG(LogTemp, Error, TEXT("JSON JSONArrayPushBack: wrong type. "));
 	}
 
 	return J;
