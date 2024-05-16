@@ -26,7 +26,7 @@ A Json Plugin for UE extend by Github 40K star Json Lib <https://github.com/nloh
 <br>
 
 ## Details Description
-Use BlueprintFunctionLibrary package all nlohmann::json's functions, easy to use in blueprint flexibly.
+Use BlueprintFunctionLibrary package all nlohmann::json's functions, easy to use in blueprint flexibly and elegently .
 
 <br>
 
