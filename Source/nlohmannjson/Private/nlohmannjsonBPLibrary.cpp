@@ -124,7 +124,7 @@ FString UnlohmannjsonBPLibrary::GetString(const FJSON& J, const FString& key)
 			return result.c_str();
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("JSON GetString :  wrong type ."));
+			UE_LOG(LogTemp, Error, TEXT("JSON GetString: wrong type."));
 			return "JSONGetString-NoStringType";
 		}
 	}
@@ -144,7 +144,7 @@ float UnlohmannjsonBPLibrary::GetFloat(const FJSON& J, const FString& key)
 		return f;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat: wrong type."));
 		return 0.0f;
 	}
 }
@@ -166,10 +166,17 @@ int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& J, const FString& key)
 		return i;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON GetInteger :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetInteger: wrong type."));
 		return 0;
 	}
 
+}
+
+int32 UnlohmannjsonBPLibrary::GetIntegerNoCheck(const FJSON& J, const FString& key)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	json j = (*J.data)[k];
+	return j.template get<int32>();
 }
 
 bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& J, const FString& key)
@@ -182,7 +189,7 @@ bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& J, const FString& key)
 		return b;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat: wrong type."));
 		return false;
 	}
 
@@ -226,18 +233,18 @@ FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key, bool
 			}
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("JSON GetObject :  wrong type ."));
+			UE_LOG(LogTemp, Error, TEXT("JSON GetObject: wrong type."));
 			return FJSON();
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("JSON GetObject :  Key-Absent."));
+		UE_LOG(LogTemp, Warning, TEXT("JSON GetObject: Key-Absent."));
 		return FJSON();
 	}
 }
 
-FJSON UnlohmannjsonBPLibrary::GetObjectNoCheck(const FJSON& J, const FString& key, bool copy)
+FJSON UnlohmannjsonBPLibrary::GetObjectNoCheck(const FJSON& J, const FString& key, bool copy=false)
 {
 	string k = TCHAR_TO_UTF8(*key);
 	json j = (*J.data)[k];
@@ -282,7 +289,7 @@ FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key, bool 
 		}
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat: wrong type."));
 		return FJSON();
 	}
 }
@@ -332,12 +339,12 @@ FJSON UnlohmannjsonBPLibrary::EraseArrayElementAtIndex(const FJSON& J, int32 Ind
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("JSON EraseArrayElementAtIndex :  invalid index ."));
+			UE_LOG(LogTemp, Error, TEXT("JSON EraseArrayElementAtIndex: invalid index ."));
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("JSON EraseArrayElementAtIndex :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON EraseArrayElementAtIndex: wrong type."));
 	}
 	return J;
 }
@@ -351,7 +358,7 @@ FJSON UnlohmannjsonBPLibrary::RemoveObjectFieldByKey(const FJSON& J, const FStri
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("JSON RemoveObjectFieldByKey :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON RemoveObjectFieldByKey: wrong type."));
 	}
 	return J;
 }
@@ -365,7 +372,7 @@ int UnlohmannjsonBPLibrary::GetArraySize(const FJSON& J)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("JSON GetArraySize :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetArraySize: wrong type."));
 		return 0;
 	}
 }
@@ -378,7 +385,7 @@ FString UnlohmannjsonBPLibrary::ToString(const FJSON& J)
 		return result.c_str();
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON ToString :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON ToString: wrong type."));
 		return "";
 	}
 }
@@ -391,7 +398,7 @@ float UnlohmannjsonBPLibrary::ToFloat(const FJSON& J)
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON ToFloat :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON ToFloat: wrong type."));
 		return 0.0f;
 	}
 }
@@ -404,7 +411,7 @@ int UnlohmannjsonBPLibrary::ToInteger(const FJSON& J)
 		return result;
 	}
 	else {
-		UE_LOG(LogTemp, Error, TEXT("JSON ToInteger :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON ToInteger: wrong type."));
 		return 0;
 	}
 }
@@ -426,7 +433,7 @@ bool UnlohmannjsonBPLibrary::ToBoolean(const FJSON& J)
 			return false;
 		}
 	}
-	UE_LOG(LogTemp, Error, TEXT("JSON ToBoolean :  wrong type ."));
+	UE_LOG(LogTemp, Error, TEXT("JSON ToBoolean: wrong type."));
 	return false;
 }
 
@@ -443,7 +450,7 @@ FJSON UnlohmannjsonBPLibrary::SetJSONField(const FJSON& J, const FString& key, c
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("JSON SetJSONField :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON SetJSONField: wrong type."));
 	}
 	
 	return J;

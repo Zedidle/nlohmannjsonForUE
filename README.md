@@ -4,6 +4,7 @@
 - 将json对象作为字符串存储为某个文件；
 - 极度灵活的数组构建；
 - 支持string, int, float, bool, object, array类型的增删改查；
+- 提供多种不同强度的方法来处理错误类型；
 - （中文）UTF8转码解析；
 
 <br>
@@ -34,6 +35,7 @@ Features:
 - Save Json Object as string to a file .
 - Supports maximum flexibility in constructing arrays .
 - Support types of string, int, float, bool, object, array to addition, deletion, modification and query .
+- Provide multiple ways with varying intensities to handle error types .
 - Support UTF8 .
 
 <br>Number of Blueprints: 32+

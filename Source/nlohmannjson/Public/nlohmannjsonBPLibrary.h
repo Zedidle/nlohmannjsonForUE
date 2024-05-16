@@ -68,20 +68,21 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	/* Get JSON float field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Float"), Category = "njson")
 	static float GetFloat(const FJSON& J, const FString& key);
-
-	/* Get JSON float field with a key,  wrong type will directly cause crashes. */
+	/* Get JSON float field with a key,  wrong type may directly cause crashes. */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Float NoCheck"), Category = "njson")
 	static float GetFloatNoCheck(const FJSON& J, const FString& key);
 
 	/* Get JSON integer field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Integer"), Category = "njson")
 	static int32 GetInteger(const FJSON& J, const FString& key);
+	/* Get JSON integer field with a key,  wrong type may directly cause crashes.  */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Integer NoCheck"), Category = "njson")
+	static int32 GetIntegerNoCheck(const FJSON& J, const FString& key);
 
 	/* Get JSON bool field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Boolean"), Category = "njson")
 	static bool GetBoolean(const FJSON& J, const FString& key);
-	
-	/* Get JSON bool field with a key,  wrong type will directly cause crashes.  */
+	/* Get JSON bool field with a key,  wrong type may directly cause crashes.  */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Boolean NoCheck"), Category = "njson")
 	static bool GetBooleanNoCheck(const FJSON& J, const FString& key);
 
@@ -94,7 +95,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	/* Get JSON's object field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Object"), Category = "njson")
 	static FJSON GetObject(const FJSON& J, const FString& key, bool copy);
-	/* Get JSON's object field with a key,  wrong type will directly cause crashes.  */
+	/* Get JSON's object field with a key,  wrong type may directly cause crashes.  */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Object NoCheck"), Category = "njson")
 	static FJSON GetObjectNoCheck(const FJSON& J, const FString& key, bool copy);
 
@@ -107,7 +108,7 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	/* Get JSON's array field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array"), Category = "njson")
 	static FJSON GetArray(const FJSON& J, const FString& key, bool copy);
-	/* Get JSON's array field with a key,  wrong type will directly cause crashes */
+	/* Get JSON's array field with a key,  wrong type may directly cause crashes */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array NoCheck"), Category = "njson")
 	static FJSON GetArrayNoCheck(const FJSON& J, const FString& key, bool copy);
 
