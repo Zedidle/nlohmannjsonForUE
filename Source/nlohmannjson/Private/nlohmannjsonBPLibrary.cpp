@@ -309,7 +309,7 @@ FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& J, int32 Index, bool 
 	{
 		if (copy)
 		{
-			json* result = new json(j.template get<json>());
+			json* result = new json((*J.data).template get<json>());
 			return FJSON(result);
 		}
 		else
