@@ -6,6 +6,7 @@
 - 支持string, int, float, bool, object, array类型的增删改查；
 - 提供多种不同强度的方法来处理错误类型；
 - （中文）UTF8转码解析；
+- 精细化的函数分类和类型返回值，使得蓝图节点占用更少面积；
 
 <br>
 
@@ -37,6 +38,7 @@ Features:
 - Support types of string, int, float, bool, object, array to addition, deletion, modification and query .
 - Provide multiple ways with varying intensities to handle error types .
 - Support UTF8 .
+- Refined function classification and type return values enable blueprint nodes to occupy less area .
 
 <br>Number of Blueprints: 32+
 <br>Supported Development Platforms:
