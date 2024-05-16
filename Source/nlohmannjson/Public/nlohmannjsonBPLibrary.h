@@ -69,6 +69,10 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Float"), Category = "njson")
 	static float GetFloat(const FJSON& J, const FString& key);
 
+	/* Get JSON float field with a key,  wrong type will directly cause crashes. */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Float NoCheck"), Category = "njson")
+	static float GetFloatNoCheck(const FJSON& J, const FString& key);
+
 	/* Get JSON integer field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Integer"), Category = "njson")
 	static int32 GetInteger(const FJSON& J, const FString& key);
@@ -77,6 +81,10 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Boolean"), Category = "njson")
 	static bool GetBoolean(const FJSON& J, const FString& key);
 	
+	/* Get JSON bool field with a key,  wrong type will directly cause crashes.  */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Boolean NoCheck"), Category = "njson")
+	static bool GetBooleanNoCheck(const FJSON& J, const FString& key);
+
 	/* Judge if a JSON is object type */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Is JSON Object Self"), Category = "njson")
 	static bool IsObjectSelf(const FJSON& J);
@@ -86,6 +94,9 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	/* Get JSON's object field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Object"), Category = "njson")
 	static FJSON GetObject(const FJSON& J, const FString& key, bool copy);
+	/* Get JSON's object field with a key,  wrong type will directly cause crashes.  */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Object NoCheck"), Category = "njson")
+	static FJSON GetObjectNoCheck(const FJSON& J, const FString& key, bool copy);
 
 	/* Judge if a JSON is array type */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Is JSON Array Self"), Category = "njson")
@@ -96,14 +107,17 @@ class NLOHMANNJSON_API UnlohmannjsonBPLibrary : public UBlueprintFunctionLibrary
 	/* Get JSON's array field with a key */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array"), Category = "njson")
 	static FJSON GetArray(const FJSON& J, const FString& key, bool copy);
+	/* Get JSON's array field with a key,  wrong type will directly cause crashes */
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array NoCheck"), Category = "njson")
+	static FJSON GetArrayNoCheck(const FJSON& J, const FString& key, bool copy);
 
-	/* Get JSON array's length */
+	/* Get JSON array's length.  */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array Size", CompactNodeTitle = "Size"), Category = "njson")
 	static int GetArraySize(const FJSON& J);
 
 	/* Get JSON array's element with index */
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (DisplayName = "Get JSON Array Element", CompactNodeTitle = "GetElement"), Category = "njson")
-	static FJSON GetArrayElement(const FJSON& J, int32 Index);
+	static FJSON GetArrayElement(const FJSON& J, int32 Index, bool copy);
 
 	/* Remove element from a JSON array given an index */
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "Remove JSON Array Element at Index", CompactNodeTitle = "EraseElement"), Category = "njson")

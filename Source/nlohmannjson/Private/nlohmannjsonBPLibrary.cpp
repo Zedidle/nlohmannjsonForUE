@@ -124,7 +124,7 @@ FString UnlohmannjsonBPLibrary::GetString(const FJSON& J, const FString& key)
 			return result.c_str();
 		}
 		else {
-			UE_LOG(LogTemp, Log, TEXT("JSON GetString :  wrong type ."));
+			UE_LOG(LogTemp, Error, TEXT("JSON GetString :  wrong type ."));
 			return "JSONGetString-NoStringType";
 		}
 	}
@@ -144,9 +144,16 @@ float UnlohmannjsonBPLibrary::GetFloat(const FJSON& J, const FString& key)
 		return f;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  wrong type ."));
 		return 0.0f;
 	}
+}
+
+float UnlohmannjsonBPLibrary::GetFloatNoCheck(const FJSON& J, const FString& key)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	json j = (*J.data)[k];
+	return  j.template get<int32>();
 }
 
 int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& J, const FString& key)
@@ -159,7 +166,7 @@ int32 UnlohmannjsonBPLibrary::GetInteger(const FJSON& J, const FString& key)
 		return i;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetInteger :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetInteger :  wrong type ."));
 		return 0;
 	}
 
@@ -175,10 +182,17 @@ bool UnlohmannjsonBPLibrary::GetBoolean(const FJSON& J, const FString& key)
 		return b;
 	}
 	else {
-		UE_LOG(LogTemp, Log, TEXT("JSON GetFloat :  wrong type ."));
+		UE_LOG(LogTemp, Error, TEXT("JSON GetFloat :  wrong type ."));
 		return false;
 	}
 
+}
+
+bool UnlohmannjsonBPLibrary::GetBooleanNoCheck(const FJSON& J, const FString& key)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	json j = (*J.data)[k];
+	return j.template get<bool>();
 }
 
 bool UnlohmannjsonBPLibrary::IsObjectSelf(const FJSON& J)
@@ -212,14 +226,29 @@ FJSON UnlohmannjsonBPLibrary::GetObject(const FJSON& J, const FString& key, bool
 			}
 		}
 		else {
-			UE_LOG(LogTemp, Warning, TEXT("JSON GetObject :  wrong type ."));
+			UE_LOG(LogTemp, Error, TEXT("JSON GetObject :  wrong type ."));
 			return FJSON();
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("JJSON GetObject :  Key-Absent."));
+		UE_LOG(LogTemp, Warning, TEXT("JSON GetObject :  Key-Absent."));
 		return FJSON();
+	}
+}
+
+FJSON UnlohmannjsonBPLibrary::GetObjectNoCheck(const FJSON& J, const FString& key, bool copy)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	json j = (*J.data)[k];
+	if (copy)
+	{
+		json* result = new json(j.template get<json>());
+		return FJSON(result);
+	}
+	else
+	{
+		return FJSON(&(*J.data)[k]);
 	}
 }
 
@@ -258,12 +287,35 @@ FJSON UnlohmannjsonBPLibrary::GetArray(const FJSON& J, const FString& key, bool 
 	}
 }
 
-FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& J, int32 Index)
+FJSON UnlohmannjsonBPLibrary::GetArrayNoCheck(const FJSON& J, const FString& key, bool copy = false)
+{
+	string k = TCHAR_TO_UTF8(*key);
+	json j = (*J.data)[k];
+	if (copy)
+	{
+		json* result = new json(j.template get<json>());
+		return FJSON(result);
+	}
+	else
+	{
+		return FJSON(&(*J.data)[k]);
+	}
+}
+
+FJSON UnlohmannjsonBPLibrary::GetArrayElement(const FJSON& J, int32 Index, bool copy = false)
 {
 	check(J.data->is_array());
 	if (J.data->is_array())
 	{
-		return FJSON((*J.data)[Index]);
+		if (copy)
+		{
+			json* result = new json(j.template get<json>());
+			return FJSON(result);
+		}
+		else
+		{
+			return FJSON((*J.data)[Index]);
+		}
 	}
 	else {
 		return FJSON();
@@ -508,7 +560,7 @@ void UnlohmannjsonBPLibrary::SaveJSON(const FJSON& J, const FString& filepath)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Log, TEXT("Filepath is not valid"));
+		UE_LOG(LogTemp, Error, TEXT("JSON SaveJSON: filepath is not valid. "));
 	}
 }
 
