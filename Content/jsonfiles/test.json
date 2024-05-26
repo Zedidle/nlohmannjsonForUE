@@ -2,6 +2,7 @@
   "squadName": "Super hero squad",
   "formed": 2016,
   "active": true,
+  "author": "5THsama郭富城",
   "test": {
     "homeTown": "Metro City",
     "secretBase": "Super tower"

@@ -139,7 +139,7 @@ float UnlohmannjsonBPLibrary::GetFloat(const FJSON& J, const FString& key)
 	string k = TCHAR_TO_UTF8(*key);
 	json j = (*J.data)[k];
 	check(j.is_number_float());
-	if (j.is_number_float()) {
+	if (j.is_number_float() || j.is_number_integer()) {
 		float f = j.template get<float>();
 		return f;
 	}
