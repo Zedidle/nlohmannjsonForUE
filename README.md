@@ -1,5 +1,8 @@
 # NJson
-### 使用Github上Star数最高的JSON库 <https://github.com/nlohmann/json> 来对UE做的中间层扩展, 目前支持：
+
+### [NJSON中语教程](https://www.bilibili.com/video/BV1yM4m167da/?spm_id_from=333.999.0.0&vd_source=0cb94f8e329d533211e2838a8fffdcba)
+
+### 使用Github上Star数最高的JSON库 [nlohmann/json](https://github.com/nlohmann/json) 来对UE做的中间层扩展, 目前支持：
 - 蓝图中无需事先定义任何结构，通过读取文件、解析字符串加载nlohmann::json数据，可以按需逐步解析或构筑任何json结构；
 - 将json对象作为字符串存储为某个文件；
 - 极度灵活的数组构建；
@@ -9,6 +12,8 @@
 - 精细化的函数分类和类型返回值，使得蓝图节点占用更少面积；
 
 <br>
+
+
 
 自定义了与蓝图通讯的结构**JSON**，其内部存储一个nlohmann::json结构，所有的函数都是围绕这个nlohmann::json自带的函数来展开，写在继承UBlueprintFunctionLibrary的函数库中：
 
